@@ -1,39 +1,49 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+    <!-- SB Admin 2 CSS -->
+    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
-        <!-- SB Admin 2 Bootstrap -->
-        <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <!-- Scripts 
+    @vite(['resources/js/app.js'])-->
+</head>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+<body id="page-top">
 
-            @include('layouts.navigation')
+    <div id="wrapper">
 
-            <!-- Page Heading -->
-            @if (isset($header))
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-            @endif
+        {{-- Sidebar --}}
+        @include('partials.sidebar')
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <div id="content">
+
+                {{-- Topbar --}}
+                @include('partials.topbar')
+
+                <main class="container-fluid pt-4">
+                    {{ $slot ?? '' }}
+                    @yield('content')
+                </main>
+
+            </div>
+
         </div>
-    </body>
+
+    </div>
+
+    <!-- SB Admin 2 JS -->
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+
+</body>
 </html>
