@@ -1,70 +1,92 @@
-@extends('layouts.app')
+<x-app-layout>
 
-@section('content')
-<h1 class="h3 mb-4 text-gray-800">Products</h1>
+    <x-slot name="header">
+        <h1 class="h3 mb-0 text-gray-800">Products</h1>
+    </x-slot>
 
-<!-- Add Product Button -->
-<a href="{{ route('products.create') }}" class="btn btn-primary mb-3">
-    Add Product
-</a>
+    <div class="container-fluid">
 
-<!-- Global Search Form -->
-<form method="GET" action="{{ route('products.index') }}" class="mb-3">
-    <div class="input-group">
-        <input type="text" name="query" class="form-control" placeholder="Search products..."
-               value="{{ $query ?? '' }}">
-        <button class="btn btn-primary" type="submit">Search</button>
-    </div>
-    @if($query)
-        <a href="{{ route('products.index') }}" class="btn btn-secondary btn-sm mt-2">Clear Search</a>
-    @endif
-</form>
+        <!-- Card Wrapper -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Products List</h6>
 
-<!-- Success Message -->
-@if(session('success'))
-<div class="alert alert-success">{{ session('success') }}</div>
-@endif
+                <a href="{{ route('products.create') }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> Add Product
+                </a>
+            </div>
 
-<!-- Products Table -->
-<div class="card shadow">
-    <div class="card-body">
-        <table class="table table-bordered">
-            <thead class="bg-primary text-white">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Qty</th>
-                    <th width="180">Action</th>
-                </tr>
-            </thead>
+            <div class="card-body">
 
-            <tbody>
-                @forelse($products as $p)
-                <tr>
-                    <td>{{ $p->id }}</td>
-                    <td>{{ $p->name }}</td>
-                    <td>{{ $p->price }}</td>
-                    <td>{{ $p->quantity }}</td>
-                    <td>
-                        <a href="{{ route('products.edit', $p->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                <!-- Search -->
+                <form method="GET" class="mb-4">
+                    <div class="input-group">
+                        <input type="text" name="query" class="form-control"
+                               placeholder="Search products…" value="{{ $query ?? '' }}">
+                        <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                    </div>
 
-                        <form action="{{ route('products.destroy', $p->id) }}" method="POST" style="display:inline;">
-                            @csrf 
-                            @method('DELETE')
-                            <button class="btn btn-danger btn-sm"
-                                onclick="return confirm('Delete this product?')">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="5" class="text-center">No products found.</td>
-                </tr>
-                @endforelse
-            </tbody>
+                    @if($query)
+                        <a href="{{ route('products.index') }}"
+                           class="btn btn-secondary btn-sm mt-2">Clear Search</a>
+                    @endif
+                </form>
 
-        </table>
-    </div>
-</div>
-@endsection
+                <!-- Success message -->
+                @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
+
+                <!-- Table -->
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th width="180">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @forelse($products as $p)
+                                <tr>
+                                    <td>{{ $p->id }}</td>
+                                    <td>{{ $p->name }}</td>
+                                    <td>{{ $p->price }}</td>
+                                    <td>{{ $p->quantity }}</td>
+
+                                    <td>
+                                        <a href="{{ route('products.edit', $p->id) }}"
+                                           class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        <form action="{{ route('products.destroy', $p->id) }}"
+                                              method="POST" style="display:inline;">
+                                            @csrf @method('DELETE')
+
+                                            <button class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Delete this product?')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No products found</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+            </div> <!-- end card-body -->
+        </div><!-- end card -->
+
+    </div> <!-- container-fluid -->
+
+</x-app-layout>

@@ -3,20 +3,28 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\LoginRedirectController;
 
-// ---------------------------
-// Protected Admin Routes
-// ---------------------------
-Route::middleware(['auth', 'verified', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+// Default page → Registration
+Route::get('/', function () {
+    return redirect()->route('register');
 });
 
-// ---------------------------
-// Public Product CRUD Routes (Optional)
-// ---------------------------
-Route::resource('products', ProductController::class);
+// Dashboard redirect based on role
+Route::get('/home', [LoginRedirectController::class, 'redirect'])
+    ->middleware('auth')
+    ->name('home');
 
-// ---------------------------
-// Authentication / Email Verification
-// ---------------------------
+// Admin routes
+Route::middleware(['auth', 'verified', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])
+        ->name('admin.dashboard');
+});
+
+// Product CRUD (public but mostly for users)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('products', ProductController::class);
+});
+
+// Breeze Auth routes
 require __DIR__.'/auth.php';
