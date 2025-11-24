@@ -29,7 +29,7 @@
     <div class="card border-left-info shadow h-100 py-2">
       <div class="card-body">
         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Price</div>
-        <div class="h5 mb-0 font-weight-bold text-gray-800">${{ $totalPrice }}</div>
+        <div class="h5 mb-0 font-weight-bold text-gray-800">₱{{ $totalPrice }}</div>
       </div>
     </div>
   </div>
